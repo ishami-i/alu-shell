@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo find . -type d -exec chmod ugo=+x {} \
+sudo find . -maxdepth 1 -type d -exec chmod ugo=+x {} \
