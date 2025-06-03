@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -c 'bin' /etc/psswd
+grep -o 'root' /etc/passwd | wc -l
