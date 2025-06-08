@@ -8,6 +8,6 @@ while [ $hours -lt 13 ]; do
 	echo $minutes
 	let minutes+=1
     done
-    (( minute=+1 ))
+    (( minute=1 ))
     (( hours+=1 ))
 done
