@@ -1,3 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#sorted data on the access log file
 awk '{print $1, $9}' access.log | awk '{count[$0]++} END {for (entry in count) print count[entry], entry}' | sort -rn
 
