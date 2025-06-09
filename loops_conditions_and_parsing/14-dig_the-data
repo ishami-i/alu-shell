@@ -1,3 +1,9 @@
-#!/usr/bin/env bash
-#sorted data on the access log file
-awk '{count[$1" "$9]++} END {for (i in count) print count[i], i}' access.log | sort -rn
+#!/bin/bash
+
+# Parse the Apache log file, group by IP and HTTP status code, and sort by occurrences
+awk '{print $1, $9}' access.log | awk '{count[$1, $2]++} END {
+    for (key in count) {
+        split(key, parts, SUBSEP)
+        printf "%8d %s %s\n", count[key], parts[1], parts[2]
+    }
+}' | sort -rni
