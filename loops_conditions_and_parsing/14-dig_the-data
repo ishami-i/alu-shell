@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
-# Parse the Apache log file, group by IP and HTTP status code, and sort by occurrences
+# Script to group Apache log entries by IP and status code
 
-[ -z "$1" ] && { echo "Usage: $0 filename"; exit 1; }
+# Check if a valid file was provided as the first argument
+if [ $# -ne 1 ] || [ ! -f "$1" ]; then
+    echo "Usage: ./14-dig_the-data filename"
+    exit 1
+fi
 
-# Process the Apache log
-awk '{print $1, $9}' "$1" | \
+# Check if file is empty or badly formatted (does not have enough fields)
+if ! awk 'NF >= 9' "$1" | grep -q .; then
+    echo "Usage: ./14-dig_the-data filename"
+    exit 1
+fi
+
+# Extract IP ($1) and status code ($9), count occurrences, sort
+awk 'NF >= 9 {print $1, $9}' "$1" | \
 sort | \
 uniq -c | \
 awk '{printf "%8d %s %s\n", $1, $2, $3}' | \
