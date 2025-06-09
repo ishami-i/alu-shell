@@ -1,21 +1,5 @@
 #!/usr/bin/env bash
-# Script to group Apache log entries by IP and status code
+# Script to group Apache log visitors by IP and HTTP status code,
+# and display as: OCCURENCE_NUMBER IP HTTP_CODE (sorted descending by count)
 
-# If no argument or file does not exist or not readable
-if [ $# -ne 1 ] || [ ! -r "$1" ]; then
-    echo "Usage: ./14-dig_the-data filename"
-    exit 1
-fi
-
-# Check if file has any lines with at least 9 fields (valid Apache log line)
-if ! awk 'NF >= 9' "$1" | grep -q .; then
-    echo "Usage: ./14-dig_the-data filename"
-    exit 1
-fi
-
-# Process log: extract IP ($1) and HTTP status code ($9), count, sort
-awk 'NF >= 9 {print $1, $9}' "$1" | \
-sort | \
-uniq -c | \
-sort -rn | \
-awk '{printf "%8d %s %s\n", $1, $2, $3}'
+awk '{print $1, $9}' | sort | uniq -c | sort -nr | awk '{print $1, $2, $3}'
