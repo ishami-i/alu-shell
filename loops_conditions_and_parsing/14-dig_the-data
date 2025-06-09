@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 # Script to group Apache log entries by IP and status code
 
-# Check if a valid file was provided as the first argument
-if [ $# -ne 1 ] || [ ! -f "$1" ]; then
+# If no argument or file does not exist or not readable
+if [ $# -ne 1 ] || [ ! -r "$1" ]; then
     echo "Usage: ./14-dig_the-data filename"
     exit 1
 fi
 
-# Check if file is empty or badly formatted (does not have enough fields)
+# Check if file has any lines with at least 9 fields (valid Apache log line)
 if ! awk 'NF >= 9' "$1" | grep -q .; then
     echo "Usage: ./14-dig_the-data filename"
     exit 1
 fi
 
-# Extract IP ($1) and status code ($9), count occurrences, sort
+# Process log: extract IP ($1) and HTTP status code ($9), count, sort
 awk 'NF >= 9 {print $1, $9}' "$1" | \
 sort | \
 uniq -c | \
-awk '{printf "%8d %s %s\n", $1, $2, $3}' | \
-sort -rn
+sort -rn | \
+awk '{printf "%8d %s %s\n", $1, $2, $3}'
