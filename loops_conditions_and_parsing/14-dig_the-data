@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Parse the Apache log file, group by IP and HTTP status code, and sort by occurrences
+
 [ -z "$1" ] && { echo "Usage: $0 filename"; exit 1; }
 
+# Process the Apache log
 awk '{print $1, $9}' "$1" | \
 sort | \
 uniq -c | \
