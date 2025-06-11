@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
-# Groups Apache log visitors by IP and HTTP status code
+# This script parses an Apache log file from stdin, groups by IP and HTTP status code,
+# and prints the occurrence count, IP, and code, sorted descending by count.
 
-awk '{print $1, $9}' | sort | uniq -c | sort -nr | awk '{printf "%5d %s %s\n", $1, $2, $3}'
+awk '{ ip=$1; code=$(NF-1); key=ip " " code; count[key]++ } END { for (k in count) print count[k], k }' \
+| sort -nr'
