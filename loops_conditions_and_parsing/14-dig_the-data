@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
-# This script parses an Apache log file from stdin, groups by IP and HTTP status code,
-# and prints the occurrence count, IP, and code, sorted descending by count.
+# This script summarizes HTTP status code occurrences per IP from a log file using awk.
 
-awk '{ ip=$1; code=$(NF-1); key=ip " " code; count[key]++ } END { for (k in count) print count[k], k }' \
-| sort -nr'
+if [[ ! -s "$1" ]]; then
+    exit 0
+fi
+
+awk '
+    NF == 3 && $3 ~ /^[0-9]{3}$/ && $2 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ {
+        key = $2 " " $3
+        count[key] += 1
+    }
+    END {
+        for (k in count) {
+            print count[k], k
+        }
+    }
+' "$1" | sort -nr
