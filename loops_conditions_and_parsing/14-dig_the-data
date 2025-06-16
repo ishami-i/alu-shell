@@ -1,18 +1,3 @@
 #!/usr/bin/env bash
-# This script summarizes HTTP status code occurrences per IP from a log file using awk.
-
-if [[ ! -s "$1" ]]; then
-    exit 0
-fi
-
-awk '
-    NF == 3 && $3 ~ /^[0-9]{3}$/ && $2 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ {
-        key = $2 " " $3
-        count[key] += 1
-    }
-    END {
-        for (k in count) {
-            print count[k], k
-        }
-    }
-' "$1" | sort -nr
+#apache codes
+awk '{print $1,$9}' apache-access.log | sort -V | uniq -c | sort -n | perl -e 'print reverse <>'
