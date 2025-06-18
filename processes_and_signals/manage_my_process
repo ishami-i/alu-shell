@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
-#bash script that writes 'I am alive!' indefinitely to 'my_process' filecase "$1" in
-case
-start) start ;;
-   stop)  stop;;
-   restart) restart;;
-   *) echo "Usage: manage_my_process {start|stop|r\
-estart}"                                          
-
-      ;;
-esac
+#bash script that writes 'I am alive!' indefinitely to 'my_process' file
+while ((1)); do
+            echo "I am alive!" >> /tmp/my_process
+                sleep 2
+        done
